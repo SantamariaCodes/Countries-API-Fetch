@@ -9,7 +9,7 @@ const CountryCard: React.FC<CountryCardProps> = ({ country }) => {
   const { flag, name, population, region, capital } = country;
 
   return (
-    <div className="border-2 rounded-md text-left overflow-hidden shadow-md max-w-[300px]">
+    <div className="border-2 rounded-md text-left overflow-hidden shadow-md max-w-[350px]">
       <div className="h-48 w-full overflow-hidden">
         <img src={flag} alt={name} className="w-full h-full object-cover"/>
       </div>
