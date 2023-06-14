@@ -1,28 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import SearchBar from '../components/SearchBar';
 import FilterByRegion from '../components/FilterByRegion';
 import CountryCard from '../components/CountryCard';
 import { getCountryData, searchCountry, filterCountriesByRegion, Country } from '../utils/api';
-import { useDebounce } from '../utils/useDebounce';
 import Container from '../components/Container';
 
 const defaultCountryCodes = ['DEU', 'JPN', 'USA', 'PRT', 'ESP', 'SLV'];
+
+async function fetchCountries(): Promise<Country[]> {
+  const countryData = await getCountryData(defaultCountryCodes);
+  return countryData;
+}
 
 function Home() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    const fetchCountries = async () => {
-      const countryData = await getCountryData(defaultCountryCodes);
-      setCountries(countryData);
-    };
-
-    fetchCountries();
+    fetchCountries().then((data) => {
+      setCountries(data);
+    });
   }, []);
 
   const handleSearch = async (value: string) => {
-    setSearchTerm(value);
+    setSearchTerm(value.trim());
+
+    if (value.trim()) {
+      const searchedCountries = await searchCountry(value.trim());
+      setCountries(searchedCountries);
+    } else {
+      const countryData = await fetchCountries();
+      setCountries(countryData);
+    }
   };
 
   const handleFilter = async (region: string) => {
@@ -30,25 +39,11 @@ function Home() {
     setCountries(filteredCountries);
   };
 
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
-  useEffect(() => {
-    if (debouncedSearchTerm) {
-      const fetchCountry = async () => {
-        const countryData = await searchCountry(debouncedSearchTerm);
-        setCountries(countryData);
-      };
-
-      fetchCountry();
-    } else {
-      const fetchCountries = async () => {
-        const countryData = await getCountryData(defaultCountryCodes);
-        setCountries(countryData);
-      };
-
-      fetchCountries();
-    }
-  }, [debouncedSearchTerm]);
+  const memoizedCountryCards = useMemo(
+    () =>
+      countries.map((country, i) => <CountryCard key={i} country={country} />),
+    [countries]
+  );
 
   return (
     <Container>
@@ -58,8 +53,8 @@ function Home() {
           <FilterByRegion onFilter={handleFilter} className="md:w-1/5" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2 lg:mt-10">
-          {countries.length > 0 ? (
-            countries.map((country, i) => <CountryCard key={i} country={country} />)
+          {memoizedCountryCards.length > 0 ? (
+            memoizedCountryCards
           ) : (
             <div>No country found</div>
           )}
