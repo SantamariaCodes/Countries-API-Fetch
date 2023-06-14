@@ -8,23 +8,24 @@ export type Country = {
 };
 
 // Function to fetch data of a single country
-export async function getCountryData(name: string): Promise<Country> {
-  const response = await fetch(`https://restcountries.com/v3.1/name/${name}?fullText=true`);
+export async function getCountryData(names: string[]): Promise<Country[]> {
+  const response = await fetch(
+    `https://restcountries.com/v3.1/alpha?codes=${names.join(',')}`
+  );
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
   const countries = await response.json();
-  const country = countries[0]; // the API returns an array, so we take the first element
 
-  return {
+  return countries.map((country: any) => ({
     flag: country.flags.png,
     name: country.name.common,
     population: country.population,
     region: country.region,
-    capital: country.capital[0], // capital is an array, so we take the first element
-  };
+    capital: country.capital[0],
+  }));
 }
 
 // Function to fetch data of all countries
