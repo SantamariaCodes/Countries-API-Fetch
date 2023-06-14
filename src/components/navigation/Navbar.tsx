@@ -5,9 +5,6 @@ import Container from '../Container';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleTheme, selectTheme } from '../../features/theme/themeSlice';
 
-// Rest of the code
-
-
 const Navbar: React.FC = () => {
   const theme = useSelector(selectTheme);
   const dispatch = useDispatch();
@@ -17,7 +14,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className={`bg-white ${theme === 'dark' ? 'bg-dark' : ''} shadow-sm`}>
+<nav className={`bg-${theme === 'dark' ? 'dark' : 'light'} shadow-sm`}>
       <Container>
         <div className="flex justify-between items-center p-5">
           <h1 className={`text-2xl font-semibold ${theme === 'dark' ? 'text-light' : 'text-gray-900'}`}>

@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
-
 const initialState = { value: 'light' };
 
 const themeSlice = createSlice({
