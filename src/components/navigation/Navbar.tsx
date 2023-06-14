@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
       <Container>
         <div className="flex justify-between items-center p-5">
           <h1 className={`text-2xl font-semibold ${theme === 'dark' ? 'text-light' : 'text-gray-900'}`}>
-            Where in the world?
+            Where in the world???
           </h1>
           <button onClick={handleDarkModeToggle} className="focus:outline-none">
             {theme === 'dark' ? (
