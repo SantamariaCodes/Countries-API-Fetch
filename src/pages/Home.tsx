@@ -4,7 +4,7 @@ import FilterByRegion from '../components/FilterByRegion';
 import CountryCard from '../components/CountryCard';
 import { getCountryData, searchCountry, filterCountriesByRegion, Country } from '../utils/api';
 import { useDebounce } from '../utils/useDebounce';
-
+import Container from '../components/Container';
 
 function Home() {
   const [countries, setCountries] = useState<Country[]>([]);
@@ -49,21 +49,23 @@ function Home() {
     }
   }, [debouncedSearchTerm]);
   return (
-    <div className="flex flex-col items-center mx-5 md:mx-10">
-      <div className="w-full flex flex-col md:flex-row justify-between mb-4 md:mb-0 mt-3 lg:mt-6">
+    <Container>
+    <div className="flex flex-col items-center">
+      <div className=" px-3 w-full flex flex-col md:flex-row justify-between mb-4 md:mb-0 mt-3 lg:mt-6">
         <SearchBar onSearch={handleSearch} className="mb-4 md:mb-0 md:w-2/5" />
         <FilterByRegion onFilter={handleFilter} className="md:w-1/5" />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2 lg:mt-10">
-  {countries.length > 0 ? (
-    countries.map((country, i) => <CountryCard key={i} country={country} />)
-  ) : (
-    <div>No country found</div>
-  )}
-</div>
-
+        {countries.length > 0 ? (
+          countries.map((country, i) => <CountryCard key={i} country={country} />)
+        ) : (
+          <div>No country found</div>
+        )}
+      </div>
     </div>
+  </Container>
   );
+  
 }
 
 export default Home;
