@@ -17,9 +17,12 @@ function Home() {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    fetchCountries().then((data) => {
-      setCountries(data);
-    });
+    const fetchCountries = async () => {
+      const countryData = await getCountryData(defaultCountryCodes);
+      setCountries(countryData);
+    };
+  
+    fetchCountries();
   }, []);
 
   const handleSearch = async (value: string) => {

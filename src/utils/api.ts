@@ -8,10 +8,9 @@ export type Country = {
 };
 
 // Function to fetch data of a single country
-export async function getCountryData(names: string[]): Promise<Country[]> {
-  const response = await fetch(
-    `https://restcountries.com/v3.1/alpha?codes=${names.join(',')}`
-  );
+export async function getCountryData(codes: string[]): Promise<Country[]> {
+  const codesQueryParam = codes.join(',');
+  const response = await fetch(`https://restcountries.com/v3.1/alpha?codes=${codesQueryParam}`);
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
